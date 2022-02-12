@@ -1,16 +1,26 @@
 const fs = require('fs');
 let fileTitles = [];
 
-let data = fs.readFileSync("all.json");
-let parsedFile = JSON.parse(data);
 
-const fileparser = () =>
+const fileparser = (file) =>
 {
-    for(i = 0; i < parsedFile.length; i++)
-    {
-        fileTitles[i] = parsedFile[i].title;
-    }
-    return fileTitles;
+    let exist = fs.existsSync(file)
+        if(exist === true)
+            {
+                let data = fs.readFileSync(file);
+                let parsedFile = JSON.parse(data);
+                for(i = 0; i < parsedFile.length; i++)
+                {
+                    fileTitles[i] = parsedFile[i].title;
+                }
+                return fileTitles;
+            }
+        else
+            {
+                fs.appendFileSync(file, "[]");
+                fileparser(file)
+            }
+
 }
 
-exports.titlelist = fileparser;
+exports.filereader = fileparser;
